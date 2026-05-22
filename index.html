@@ -177,9 +177,105 @@
     font-family:'Cinzel',serif;letter-spacing:.3em;font-size:10px;
   }
   footer .heart{color:var(--gold);margin:0 6px}
+
+  /* ===== OPENING ENVELOPE OVERLAY ===== */
+  body.locked{overflow:hidden}
+  .envelope-overlay{
+    position:fixed;inset:0;z-index:9999;
+    background:linear-gradient(135deg,#F5E8C8 0%,#E8DCC4 50%,#C9B68B 100%);
+    display:flex;align-items:center;justify-content:center;
+    transition:opacity .8s ease;
+  }
+  .envelope-overlay.opening .flap-left{transform:translateX(-110%) rotateY(-25deg)}
+  .envelope-overlay.opening .flap-right{transform:translateX(110%) rotateY(25deg)}
+  .envelope-overlay.opening .env-content{opacity:0;transform:scale(.9)}
+  .envelope-overlay.opened{opacity:0;pointer-events:none}
+  .flap-left,.flap-right{
+    position:absolute;top:0;bottom:0;width:50%;
+    background:linear-gradient(135deg,#8E7A5F 0%,#6B5840 100%);
+    transition:transform 1.4s cubic-bezier(.7,.05,.3,1);
+    box-shadow:inset 0 0 80px rgba(0,0,0,.15);
+    z-index:1;
+  }
+  .flap-left{left:0;border-right:1px solid rgba(255,255,255,.15)}
+  .flap-right{right:0;border-left:1px solid rgba(255,255,255,.15)}
+  .flap-left::after,.flap-right::after{
+    content:"✦";position:absolute;top:50%;color:rgba(255,255,255,.25);
+    font-size:40px;transform:translateY(-50%);
+  }
+  .flap-left::after{right:24px}
+  .flap-right::after{left:24px}
+  .env-content{
+    position:relative;z-index:2;text-align:center;padding:30px;
+    transition:opacity .6s ease,transform .6s ease;
+    max-width:90%;
+  }
+  .env-ornament{
+    font-family:'Cinzel',serif;letter-spacing:.5em;
+    font-size:11px;color:var(--gold);margin-bottom:18px;
+  }
+  .env-ornament::before,.env-ornament::after{content:"✦";margin:0 12px;color:var(--gold-light)}
+  .env-names{
+    font-family:'Cormorant Garamond',serif;font-weight:600;
+    font-size:clamp(44px,11vw,84px);color:var(--gold);
+    line-height:1.05;letter-spacing:.02em;
+    text-shadow:0 2px 20px rgba(142,122,95,.2);
+  }
+  .env-names .amp{font-style:italic;font-weight:500;color:var(--gold-light);margin:0 6px}
+  .env-sub{
+    margin-top:14px;font-family:'Cinzel',serif;letter-spacing:.4em;
+    font-size:11px;color:var(--muted);
+  }
+  .open-btn{
+    display:inline-block;margin-top:36px;padding:14px 38px;
+    background:var(--gold);color:#fff;cursor:pointer;border:none;
+    font-family:'Cinzel',serif;letter-spacing:.3em;font-size:12px;
+    border-radius:2px;box-shadow:0 6px 24px rgba(142,122,95,.4);
+    animation:pulse 2s ease-in-out infinite;
+  }
+  .open-btn:hover{background:var(--ink);animation:none}
+  @keyframes pulse{
+    0%,100%{transform:scale(1);box-shadow:0 6px 24px rgba(142,122,95,.4)}
+    50%{transform:scale(1.05);box-shadow:0 8px 32px rgba(142,122,95,.55)}
+  }
+
+  /* ===== SCROLL REVEAL ===== */
+  .reveal{opacity:0;transform:translateY(24px);transition:opacity .9s ease,transform .9s ease}
+  .reveal.in{opacity:1;transform:none}
+
+  /* ===== SPARKLES ===== */
+  .sparkle{
+    position:absolute;color:var(--gold-light);font-size:14px;
+    pointer-events:none;opacity:0;
+    animation:float 7s ease-in-out infinite;
+  }
+  @keyframes float{
+    0%{opacity:0;transform:translateY(20px) scale(.6)}
+    20%{opacity:.8}
+    80%{opacity:.6}
+    100%{opacity:0;transform:translateY(-80px) scale(1.1)}
+  }
+  .hero{overflow:hidden}
+
+  @media (prefers-reduced-motion: reduce){
+    .open-btn,.sparkle,.reveal{animation:none !important;transition:none !important}
+    .reveal{opacity:1;transform:none}
+  }
 </style>
 </head>
-<body>
+<body class="locked">
+
+<!-- Opening Envelope -->
+<div class="envelope-overlay" id="envelope">
+  <div class="flap-left"></div>
+  <div class="flap-right"></div>
+  <div class="env-content">
+    <div class="env-ornament">YOU'RE INVITED</div>
+    <div class="env-names">Rashmitha <span class="amp">&</span> Uttej</div>
+    <div class="env-sub">A WEDDING CELEBRATION</div>
+    <button class="open-btn" id="openBtn" type="button">OPEN INVITATION</button>
+  </div>
+</div>
 
 <header class="hero">
   <div class="ornament">WEDDING CELEBRATION</div>
@@ -319,6 +415,52 @@
 <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
 
 <script>
+/* =====================================================================
+   0) OPENING ENVELOPE  +  SCROLL REVEAL  +  SPARKLES
+   ===================================================================== */
+(function initIntro(){
+  const overlay = document.getElementById('envelope');
+  const btn     = document.getElementById('openBtn');
+  function openInvite(){
+    overlay.classList.add('opening');
+    setTimeout(()=>{
+      overlay.classList.add('opened');
+      document.body.classList.remove('locked');
+      setTimeout(()=>overlay.remove(), 900);
+    }, 1400);
+  }
+  btn.addEventListener('click', openInvite);
+  // Allow Enter / Space too
+  document.addEventListener('keydown', (e)=>{
+    if ((e.key==='Enter'||e.key===' ') && !overlay.classList.contains('opening')){
+      openInvite();
+    }
+  }, { once:true });
+
+  // Scroll-reveal sections
+  document.querySelectorAll('section.card, .meta, .countdown').forEach(el => el.classList.add('reveal'));
+  const io = new IntersectionObserver((entries)=>{
+    entries.forEach(en => { if (en.isIntersecting){ en.target.classList.add('in'); io.unobserve(en.target); } });
+  }, { threshold: 0.12 });
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+  // Sparkles in the hero
+  const hero = document.querySelector('.hero');
+  if (hero){
+    for (let i=0; i<10; i++){
+      const s = document.createElement('span');
+      s.className = 'sparkle';
+      s.textContent = '✦';
+      s.style.left  = (5 + Math.random()*90) + '%';
+      s.style.top   = (20 + Math.random()*70) + '%';
+      s.style.fontSize = (10 + Math.random()*14) + 'px';
+      s.style.animationDelay    = (Math.random()*7) + 's';
+      s.style.animationDuration = (5 + Math.random()*5) + 's';
+      hero.appendChild(s);
+    }
+  }
+})();
+
 /* =====================================================================
    1) FIREBASE CONFIG  —  PASTE YOUR PROJECT CONFIG BELOW
    --------------------------------------------------------------------
