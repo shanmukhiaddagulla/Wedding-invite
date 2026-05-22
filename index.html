@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Rashmitha & Uttej · Wedding</title>
+<meta name="description" content="Join us in celebrating the wedding of Rashmitha & Uttej — Thursday, July 2, 2026 at Hawthorn Hills Ranch, Krum, Texas." />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Cinzel:wght@500;600&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --gold:#8E7A5F;
+    --gold-light:#C9B68B;
+    --gold-soft:#E8DCC4;
+    --cream:#F8F2E6;
+    --ink:#3B2F1E;
+    --muted:#7A6A52;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:var(--cream);color:var(--ink);font-family:'Montserrat',sans-serif;line-height:1.6;-webkit-font-smoothing:antialiased}
+  a{color:var(--gold);text-decoration:none}
+  a:hover{text-decoration:underline}
+  .wrap{max-width:680px;margin:0 auto;padding:0 20px}
+
+  /* HERO */
+  .hero{
+    position:relative;text-align:center;padding:48px 20px 32px;
+    background:linear-gradient(180deg,#F8F2E6 0%,#EFE4CC 100%);
+    border-bottom:1px solid var(--gold-soft);
+  }
+  .ornament{
+    font-family:'Cinzel',serif;letter-spacing:.35em;
+    color:var(--gold);font-size:11px;margin-bottom:14px;
+  }
+  .ornament::before,.ornament::after{content:"✦";margin:0 10px;color:var(--gold-light)}
+  .names{
+    font-family:'Cormorant Garamond',serif;font-weight:600;
+    font-size:clamp(40px,9vw,68px);color:var(--gold);
+    line-height:1.05;letter-spacing:.02em;
+  }
+  .names .amp{font-style:italic;font-weight:500;color:var(--gold-light);margin:0 4px}
+  .subtitle{
+    margin-top:10px;font-family:'Cinzel',serif;letter-spacing:.4em;
+    font-size:12px;color:var(--muted);
+  }
+  .families{
+    margin-top:14px;font-family:'Cormorant Garamond',serif;
+    color:var(--ink);font-size:17px;line-height:1.5;
+  }
+  .families b{color:var(--gold);font-weight:600}
+  .families .and{
+    font-family:'Cinzel',serif;font-size:10px;letter-spacing:.4em;
+    color:var(--gold-light);margin:4px 0;
+  }
+  .photo-frame{
+    margin:28px auto 0;max-width:520px;
+    border:1px solid var(--gold-light);
+    padding:10px;background:#fff;
+    box-shadow:0 8px 30px rgba(142,122,95,.18);
+  }
+  .photo-frame img{display:block;width:100%;height:auto}
+
+  /* HOSTED + WHEN/WHERE */
+  .meta{padding:36px 20px 8px;text-align:center}
+  .hosted{font-family:'Cinzel',serif;letter-spacing:.25em;font-size:11px;color:var(--muted)}
+  .when{
+    margin-top:18px;font-family:'Cormorant Garamond',serif;
+    font-size:26px;color:var(--ink);font-weight:500;
+  }
+  .when small{display:block;font-family:'Montserrat',sans-serif;font-size:13px;color:var(--muted);letter-spacing:.18em;margin-top:6px}
+  .where{margin-top:18px;font-size:14px;color:var(--ink)}
+  .where a{font-weight:500}
+
+  /* COUNTDOWN */
+  .countdown{
+    display:flex;justify-content:center;gap:10px;margin:28px auto 8px;flex-wrap:wrap;
+  }
+  .cd{
+    min-width:74px;background:#fff;border:1px solid var(--gold-soft);
+    padding:14px 10px;border-radius:6px;box-shadow:0 4px 14px rgba(142,122,95,.08)
+  }
+  .cd b{display:block;font-family:'Cormorant Garamond',serif;font-size:30px;color:var(--gold);line-height:1}
+  .cd span{font-family:'Cinzel',serif;font-size:9px;letter-spacing:.25em;color:var(--muted);margin-top:6px;display:block}
+
+  /* SECTIONS */
+  section.card{
+    background:#fff;margin:28px auto;padding:28px 24px;
+    border:1px solid var(--gold-soft);border-radius:4px;
+    box-shadow:0 6px 24px rgba(142,122,95,.07);
+  }
+  h2{
+    font-family:'Cormorant Garamond',serif;color:var(--gold);
+    font-weight:600;font-size:26px;text-align:center;margin-bottom:6px;
+  }
+  .rule{
+    width:60px;height:1px;background:var(--gold-light);margin:8px auto 18px;position:relative
+  }
+  .rule::before,.rule::after{content:"";position:absolute;top:-2px;width:5px;height:5px;background:var(--gold);border-radius:50%}
+  .rule::before{left:-10px}.rule::after{right:-10px}
+  section.card p{text-align:center;color:var(--ink);font-size:14.5px}
+  section.card p + p{margin-top:8px}
+  .btn{
+    display:inline-block;margin-top:14px;padding:11px 22px;
+    background:var(--gold);color:#fff;font-family:'Cinzel',serif;letter-spacing:.2em;
+    font-size:11px;border-radius:2px;
+  }
+  .btn:hover{background:var(--ink);text-decoration:none}
+
+  /* EVENT CARDS */
+  .event{
+    margin-top:18px;padding:14px 16px;
+    background:#FBF7EE;border-left:3px solid var(--gold-light);
+    border-radius:3px;text-align:left;
+  }
+  .event.highlight{
+    background:linear-gradient(180deg,#FBF3E0 0%,#F5E8C8 100%);
+    border-left:3px solid var(--gold);
+  }
+  .ev-title{
+    font-family:'Cormorant Garamond',serif;font-size:22px;
+    color:var(--gold);font-weight:600;
+  }
+  .ev-meta{font-size:13px;color:var(--ink);margin-top:4px;letter-spacing:.05em}
+  .ev-venue{font-size:12.5px;color:var(--muted);margin-top:4px}
+  .ev-dress{
+    margin-top:6px;font-family:'Cinzel',serif;letter-spacing:.18em;
+    font-size:10.5px;color:var(--muted);
+  }
+  .ev-map{
+    display:inline-block;margin-top:10px;padding:7px 14px;
+    background:transparent;color:var(--gold);
+    border:1px solid var(--gold);border-radius:2px;
+    font-family:'Cinzel',serif;letter-spacing:.2em;font-size:10px;
+  }
+  .ev-map:hover{background:var(--gold);color:#fff;text-decoration:none}
+
+  /* FORM */
+  form.rsvp{display:grid;gap:12px;margin-top:18px}
+  form.rsvp label{font-size:11px;letter-spacing:.2em;color:var(--muted);font-family:'Cinzel',serif}
+  form.rsvp input,form.rsvp select,form.rsvp textarea{
+    width:100%;padding:11px 12px;border:1px solid var(--gold-soft);
+    background:#FBF7EE;font-family:'Montserrat',sans-serif;font-size:14px;color:var(--ink);
+    border-radius:3px;outline:none;transition:border .2s
+  }
+  form.rsvp input:focus,form.rsvp select:focus,form.rsvp textarea:focus{border-color:var(--gold)}
+  .row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  @media(max-width:480px){.row{grid-template-columns:1fr}}
+  .submit{
+    margin-top:6px;padding:13px;border:none;cursor:pointer;
+    background:var(--gold);color:#fff;font-family:'Cinzel',serif;letter-spacing:.25em;font-size:12px;
+  }
+  .submit:hover{background:var(--ink)}
+  .status{text-align:center;font-size:13px;color:var(--gold);min-height:18px;margin-top:6px}
+
+  /* COMMENT WALL */
+    background:#FBF7EE;border-left:3px solid var(--gold-light);
+    padding:12px 14px;margin-top:12px;border-radius:2px;text-align:left
+  }
+  .comment .meta-line{font-size:11px;color:var(--muted);letter-spacing:.1em;margin-bottom:4px}
+  .comment .meta-line b{color:var(--gold);font-family:'Cormorant Garamond',serif;font-size:15px;font-weight:600;letter-spacing:0;margin-right:8px}
+  .comment p{text-align:left;font-size:14px}
+  .empty{color:var(--muted);font-style:italic;font-size:13px;margin-top:10px}
+
+  footer{
+    text-align:center;padding:30px 20px 50px;color:var(--muted);
+    font-family:'Cinzel',serif;letter-spacing:.3em;font-size:10px;
+  }
+  footer .heart{color:var(--gold);margin:0 6px}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="ornament">WEDDING CELEBRATION</div>
+  <h1 class="names">Rashmitha <span class="amp">&</span> Uttej</h1>
+  <div class="families">
+    <div>Daughter of <b>Garige Sandeep &amp; Garige Sunitha</b></div>
+    <div class="and">~&nbsp;&amp;&nbsp;~</div>
+    <div>Son of <b>Gondhi Venkat Ram Reddy &amp; Gondhi Vani</b></div>
+  </div>
+  <div class="photo-frame">
+    <img src="couple.png" alt="Rashmitha and Uttej" onerror="this.style.display='none'">
+  </div>
+</header>
+
+<div class="meta wrap">
+  <div class="hosted">REQUEST THE PLEASURE OF YOUR COMPANY</div>
+  <div class="when">
+    Thursday, July 2, 2026
+    <small>12:40 PM · CDT</small>
+  </div>
+  <div class="where">
+    <a href="https://www.google.com/maps/search/?api=1&query=Hawthorn+Hills+Ranch+10340+Jackson+Rd+Krum+TX+76249" target="_blank" rel="noopener">
+      Hawthorn Hills Ranch<br>
+      10340 Jackson Rd, Krum, Texas 76249
+    </a>
+  </div>
+
+  <div class="countdown" id="countdown" aria-live="polite">
+    <div class="cd"><b id="cd-d">--</b><span>DAYS</span></div>
+    <div class="cd"><b id="cd-h">--</b><span>HOURS</span></div>
+    <div class="cd"><b id="cd-m">--</b><span>MINUTES</span></div>
+    <div class="cd"><b id="cd-s">--</b><span>SECONDS</span></div>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <section class="card">
+    <h2>Wedding Events</h2><div class="rule"></div>
+    <p style="margin-bottom:10px">All pre-wedding events are held at:</p>
+    <p style="font-family:'Cormorant Garamond',serif;font-size:17px;color:var(--gold)">
+      The Bliss at Aubrey — Ranch House
+    </p>
+    <p style="font-size:13px;color:var(--muted)">4381 US-377, Aubrey, TX 76227</p>
+    <p style="text-align:center;margin-top:8px">
+      <a class="btn" href="https://www.google.com/maps/search/?api=1&query=The+Bliss+at+Aubrey+Ranch+House+4381+US-377+Aubrey+TX+76227" target="_blank" rel="noopener">OPEN IN MAPS</a>
+    </p>
+
+    <div class="event">
+      <div class="ev-title">Haldi Ceremony</div>
+      <div class="ev-meta">Tuesday, June 30, 2026 · 10:00 AM onwards</div>
+      <div class="ev-dress">Dress code: Pink or Yellow</div>
+      <a class="ev-map" href="https://www.google.com/maps/search/?api=1&query=The+Bliss+at+Aubrey+Ranch+House+4381+US-377+Aubrey+TX+76227" target="_blank" rel="noopener">OPEN IN MAPS</a>
+    </div>
+
+    <div class="event">
+      <div class="ev-title">Pellikuthuru</div>
+      <div class="ev-meta">Tuesday, June 30, 2026 · 3:00 PM onwards</div>
+      <a class="ev-map" href="https://www.google.com/maps/search/?api=1&query=The+Bliss+at+Aubrey+Ranch+House+4381+US-377+Aubrey+TX+76227" target="_blank" rel="noopener">OPEN IN MAPS</a>
+    </div>
+
+    <div class="event">
+      <div class="ev-title">Mehendi &amp; Cocktail</div>
+      <div class="ev-meta">Tuesday, June 30, 2026 · 6:00 PM onwards</div>
+      <div class="ev-dress">Dress code: Indo-Western Bling</div>
+      <a class="ev-map" href="https://www.google.com/maps/search/?api=1&query=The+Bliss+at+Aubrey+Ranch+House+4381+US-377+Aubrey+TX+76227" target="_blank" rel="noopener">OPEN IN MAPS</a>
+    </div>
+
+    <div class="event highlight">
+      <div class="ev-title">Wedding Ceremony</div>
+      <div class="ev-meta">Thursday, July 2, 2026 · 12:40 PM</div>
+      <div class="ev-venue">Hawthorn Hills Ranch · 10340 Jackson Rd, Krum, TX 76249</div>
+      <p style="text-align:center;margin-top:10px">
+        <a class="btn" href="https://www.google.com/maps/search/?api=1&query=Hawthorn+Hills+Ranch+10340+Jackson+Rd+Krum+TX+76249" target="_blank" rel="noopener">OPEN IN MAPS</a>
+      </p>
+    </div>
+  </section>
+
+  <section class="card" id="rsvp">
+    <h2>RSVP</h2><div class="rule"></div>
+    <p>Kindly respond by June 15, 2026 so we can plan a memorable evening for you.</p>
+    <form class="rsvp" id="rsvpForm" autocomplete="off">
+      <div>
+        <label for="rName">YOUR NAME</label>
+        <input id="rName" name="name" type="text" required maxlength="80" placeholder="Full name" />
+      </div>
+      <div class="row">
+        <div>
+          <label for="rAttend">WILL YOU ATTEND?</label>
+          <select id="rAttend" name="attending" required>
+            <option value="">Select…</option>
+            <option value="yes">Joyfully Accept</option>
+            <option value="no">Regretfully Decline</option>
+          </select>
+        </div>
+        <div>
+          <label for="rGuests">GUEST COUNT</label>
+          <select id="rGuests" name="guestCount" required>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4+">4+</option>
+          </select>
+        </div>
+      </div>
+      <button class="submit" type="submit">SEND RSVP</button>
+      <div class="status" id="rsvpStatus"></div>
+    </form>
+  </section>
+
+  <section class="card">
+    <h2>Comment Wall</h2><div class="rule"></div>
+    <p>We'd love to read your wishes! Leave a note for Rashmitha &amp; Uttej.</p>
+    <form class="rsvp" id="commentForm" autocomplete="off">
+      <div>
+        <label for="cName">YOUR NAME</label>
+        <input id="cName" name="name" type="text" required maxlength="80" placeholder="Your name" />
+      </div>
+      <div>
+        <label for="cMsg">MESSAGE</label>
+        <textarea id="cMsg" name="message" required maxlength="600" rows="3" placeholder="Share a wish, a memory, or a blessing…"></textarea>
+      </div>
+      <button class="submit" type="submit">POST MESSAGE</button>
+      <div class="status" id="commentStatus"></div>
+    </form>
+    <div id="commentList"></div>
+  </section>
+
+</div>
+
+<footer>
+  WITH LOVE <span class="heart">✦</span> RASHMITHA &amp; UTTEJ <span class="heart">✦</span> JULY 2, 2026
+</footer>
+
+<!-- Firebase Compat SDKs v10.8.0 -->
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
+
+<script>
+/* =====================================================================
+   1) FIREBASE CONFIG  —  PASTE YOUR PROJECT CONFIG BELOW
+   --------------------------------------------------------------------
+   Console → Project settings → General → Your apps → Web app config.
+   Realtime Database must be in TEST MODE (per the project handoff).
+   ===================================================================== */
+const firebaseConfig = {
+  apiKey:            "AIzaSyDheFirjq2S4XMrj0AGLdEX3Byi-1qNFQQ",
+  authDomain:        "wedding-invite-50b3f.firebaseapp.com",
+  databaseURL:       "https://wedding-invite-50b3f-default-rtdb.firebaseio.com",
+  projectId:         "wedding-invite-50b3f",
+  storageBucket:     "wedding-invite-50b3f.firebasestorage.app",
+  messagingSenderId: "754825516242",
+  appId:             "1:754825516242:web:da2a65eaf44abf5452490b",
+  measurementId:     "G-NS8R4GF0YL"
+};
+
+let db = null;
+try {
+  firebase.initializeApp(firebaseConfig);
+  db = firebase.database();
+} catch (e) {
+  console.warn("Firebase init failed — RSVP/comments disabled until config is set.", e);
+}
+
+/* =====================================================================
+   2) COUNTDOWN  →  Saturday, May 23, 2026, 5:30 PM CDT (UTC-5)
+   ===================================================================== */
+const EVENT_TS = Date.parse("2026-07-02T12:40:00-05:00");
+function tickCountdown(){
+  const now = Date.now();
+  let diff = Math.max(0, EVENT_TS - now);
+  const d = Math.floor(diff/86400000); diff -= d*86400000;
+  const h = Math.floor(diff/3600000);  diff -= h*3600000;
+  const m = Math.floor(diff/60000);    diff -= m*60000;
+  const s = Math.floor(diff/1000);
+  document.getElementById('cd-d').textContent = String(d).padStart(2,'0');
+  document.getElementById('cd-h').textContent = String(h).padStart(2,'0');
+  document.getElementById('cd-m').textContent = String(m).padStart(2,'0');
+  document.getElementById('cd-s').textContent = String(s).padStart(2,'0');
+}
+tickCountdown();
+setInterval(tickCountdown, 1000);
+
+/* =====================================================================
+   3) RSVP FORM  →  database.ref('rsvps').push(...)
+   ===================================================================== */
+const rsvpForm   = document.getElementById('rsvpForm');
+const rsvpStatus = document.getElementById('rsvpStatus');
+rsvpForm.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  if (!db){ rsvpStatus.textContent = "RSVP temporarily unavailable."; return; }
+  const data = {
+    name:       document.getElementById('rName').value.trim(),
+    attending:  document.getElementById('rAttend').value,
+    guestCount: document.getElementById('rGuests').value,
+    timestamp:  Date.now()
+  };
+  if (!data.name || !data.attending){ rsvpStatus.textContent = "Please complete all fields."; return; }
+  rsvpStatus.textContent = "Sending…";
+  try {
+    await db.ref('rsvps').push(data);
+    rsvpStatus.textContent = data.attending === 'yes'
+      ? "Thank you! We can't wait to celebrate with you. ✦"
+      : "Thank you for letting us know — you'll be missed. ✦";
+    rsvpForm.reset();
+  } catch (err){
+    console.error(err);
+    rsvpStatus.textContent = "Couldn't send RSVP. Please try again.";
+  }
+});
+
+/* =====================================================================
+   4) COMMENT WALL  →  push + live listener (reverse chronological)
+   ===================================================================== */
+const cForm   = document.getElementById('commentForm');
+const cStatus = document.getElementById('commentStatus');
+const cList   = document.getElementById('commentList');
+
+cForm.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  if (!db){ cStatus.textContent = "Comments temporarily unavailable."; return; }
+  const data = {
+    name:      document.getElementById('cName').value.trim(),
+    message:   document.getElementById('cMsg').value.trim(),
+    timestamp: Date.now()
+  };
+  if (!data.name || !data.message) return;
+  cStatus.textContent = "Posting…";
+  try {
+    await db.ref('comments').push(data);
+    cStatus.textContent = "Thank you for your wishes! ✦";
+    cForm.reset();
+    setTimeout(()=>cStatus.textContent="", 3000);
+  } catch (err){
+    console.error(err);
+    cStatus.textContent = "Couldn't post. Please try again.";
+  }
+});
+
+function escapeHtml(s){
+  return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+function fmtDate(ts){
+  try{ return new Date(ts).toLocaleString(undefined,{month:'short',day:'numeric',hour:'numeric',minute:'2-digit'}); }
+  catch(e){ return ""; }
+}
+
+if (db){
+  db.ref('comments').orderByChild('timestamp').on('value', (snap) => {
+    const items = [];
+    snap.forEach(child => items.push(child.val()));
+    items.sort((a,b)=>(b.timestamp||0)-(a.timestamp||0));
+    if (!items.length){
+      cList.innerHTML = '<p class="empty">Be the first to leave a note for the couple.</p>';
+      return;
+    }
+    cList.innerHTML = items.map(c => `
+      <div class="comment">
+        <div class="meta-line"><b>${escapeHtml(c.name||'Guest')}</b>${fmtDate(c.timestamp)}</div>
+        <p>${escapeHtml(c.message||'')}</p>
+      </div>`).join('');
+  });
+} else {
+  cList.innerHTML = '<p class="empty">Comments will appear here once Firebase is configured.</p>';
+}
+</script>
+
+</body>
+</html>
