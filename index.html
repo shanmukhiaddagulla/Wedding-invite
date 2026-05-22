@@ -428,7 +428,8 @@ if (db){
     }
     cList.innerHTML = items.map(c => `
       <div class="comment">
-        <div class="meta-line"><b>${escapeHtml(c.name||'Guest')}</b>${fmtDate(c.timestamp)}</div>
+        <span class="c-name">${escapeHtml(c.name||'Guest')}</span>
+        <span class="c-date">${fmtDate(c.timestamp)}</span>
         <p>${escapeHtml(c.message||'')}</p>
       </div>`).join('');
   });
