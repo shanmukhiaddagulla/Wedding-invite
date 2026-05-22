@@ -243,17 +243,22 @@
   .reveal{opacity:0;transform:translateY(24px);transition:opacity .9s ease,transform .9s ease}
   .reveal.in{opacity:1;transform:none}
 
-  /* ===== SPARKLES ===== */
+  /* ===== SPARKLES (fixed full-page layer) ===== */
+  .sparkle-layer{
+    position:fixed;inset:0;pointer-events:none;
+    z-index:5;overflow:hidden;
+  }
   .sparkle{
     position:absolute;color:var(--gold-light);font-size:14px;
     pointer-events:none;opacity:0;
     animation:float 7s ease-in-out infinite;
+    text-shadow:0 0 8px rgba(201,182,139,.5);
   }
   @keyframes float{
-    0%{opacity:0;transform:translateY(20px) scale(.6)}
-    20%{opacity:.8}
-    80%{opacity:.6}
-    100%{opacity:0;transform:translateY(-80px) scale(1.1)}
+    0%{opacity:0;transform:translateY(30px) scale(.5) rotate(0deg)}
+    20%{opacity:.9}
+    80%{opacity:.7}
+    100%{opacity:0;transform:translateY(-120px) scale(1.2) rotate(180deg)}
   }
   .hero{overflow:hidden}
 
@@ -447,9 +452,12 @@
   function openInvite(){
     overlay.classList.add('opening');
     fireConfetti();
+    // Always reveal at the top of the invitation
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' in window ? 'instant' : 'auto' });
     setTimeout(()=>{
       overlay.classList.add('opened');
       document.body.classList.remove('locked');
+      window.scrollTo({ top: 0, left: 0 });
       // A second wave once the page is revealed
       setTimeout(fireConfetti, 200);
       setTimeout(()=>overlay.remove(), 900);
@@ -469,21 +477,31 @@
   }, { threshold: 0.12 });
   document.querySelectorAll('.reveal').forEach(el => io.observe(el));
 
-  // Sparkles in the hero (more of them + bigger)
-  const hero = document.querySelector('.hero');
-  if (hero){
-    for (let i=0; i<22; i++){
-      const s = document.createElement('span');
-      s.className = 'sparkle';
-      s.textContent = Math.random()<.3 ? '✨' : '✦';
-      s.style.left  = (2 + Math.random()*96) + '%';
-      s.style.top   = (10 + Math.random()*85) + '%';
-      s.style.fontSize = (10 + Math.random()*18) + 'px';
-      s.style.animationDelay    = (Math.random()*7) + 's';
-      s.style.animationDuration = (5 + Math.random()*5) + 's';
-      hero.appendChild(s);
-    }
+  // Sparkles drifting across the full page, continuously
+  let sparkleLayer = document.querySelector('.sparkle-layer');
+  if (!sparkleLayer){
+    sparkleLayer = document.createElement('div');
+    sparkleLayer.className = 'sparkle-layer';
+    document.body.appendChild(sparkleLayer);
   }
+  function spawnSparkle(){
+    const s = document.createElement('span');
+    s.className = 'sparkle';
+    s.textContent = Math.random()<.35 ? '✨' : '✦';
+    s.style.left = (Math.random()*100) + 'vw';
+    s.style.top  = (Math.random()*100) + 'vh';
+    s.style.fontSize = (10 + Math.random()*16) + 'px';
+    const dur = 5 + Math.random()*5;
+    s.style.animationDuration = dur + 's';
+    s.style.animationDelay = '0s';
+    sparkleLayer.appendChild(s);
+    setTimeout(()=>s.remove(), dur*1000 + 100);
+  }
+  // Seed initial sparkles, then keep spawning
+  for (let i=0;i<24;i++){
+    setTimeout(spawnSparkle, Math.random()*5000);
+  }
+  setInterval(spawnSparkle, 450);
 })();
 
 /* =====================================================================
