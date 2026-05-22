@@ -413,6 +413,8 @@
 <!-- Firebase Compat SDKs v10.8.0 -->
 <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
+<!-- Confetti -->
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
 
 <script>
 /* =====================================================================
@@ -421,16 +423,39 @@
 (function initIntro(){
   const overlay = document.getElementById('envelope');
   const btn     = document.getElementById('openBtn');
+
+  const GOLD = ['#8E7A5F','#C9B68B','#E8DCC4','#FBF3E0','#F5E8C8','#D4AF37','#B8860B'];
+  function fireConfetti(){
+    if (typeof confetti !== 'function') return;
+    const defaults = { startVelocity:32, spread:360, ticks:90, zIndex:10000, colors:GOLD };
+    // Big center burst
+    confetti({ ...defaults, particleCount:120, origin:{ x:0.5, y:0.5 }, scalar:1.2 });
+    // Side cannons
+    setTimeout(()=>confetti({ ...defaults, particleCount:80, angle:60, spread:55, origin:{ x:0, y:0.7 } }), 250);
+    setTimeout(()=>confetti({ ...defaults, particleCount:80, angle:120, spread:55, origin:{ x:1, y:0.7 } }), 250);
+    // Heart/star shower from the top
+    setTimeout(()=>confetti({ ...defaults, particleCount:60, startVelocity:25, gravity:.7, ticks:140, origin:{ x:0.5, y:0 }, shapes:['star'], scalar:1.4 }), 600);
+    // Final twinkle
+    setTimeout(()=>confetti({ ...defaults, particleCount:50, origin:{ x:0.5, y:0.6 }, shapes:['circle'], scalar:.8 }), 1100);
+  }
+  function celebrate(){
+    if (typeof confetti !== 'function') return;
+    confetti({ particleCount:60, spread:90, origin:{ y:0.6 }, colors:GOLD, zIndex:10000 });
+  }
+  window.__celebrate = celebrate;
+
   function openInvite(){
     overlay.classList.add('opening');
+    fireConfetti();
     setTimeout(()=>{
       overlay.classList.add('opened');
       document.body.classList.remove('locked');
+      // A second wave once the page is revealed
+      setTimeout(fireConfetti, 200);
       setTimeout(()=>overlay.remove(), 900);
     }, 1400);
   }
   btn.addEventListener('click', openInvite);
-  // Allow Enter / Space too
   document.addEventListener('keydown', (e)=>{
     if ((e.key==='Enter'||e.key===' ') && !overlay.classList.contains('opening')){
       openInvite();
@@ -444,16 +469,16 @@
   }, { threshold: 0.12 });
   document.querySelectorAll('.reveal').forEach(el => io.observe(el));
 
-  // Sparkles in the hero
+  // Sparkles in the hero (more of them + bigger)
   const hero = document.querySelector('.hero');
   if (hero){
-    for (let i=0; i<10; i++){
+    for (let i=0; i<22; i++){
       const s = document.createElement('span');
       s.className = 'sparkle';
-      s.textContent = '✦';
-      s.style.left  = (5 + Math.random()*90) + '%';
-      s.style.top   = (20 + Math.random()*70) + '%';
-      s.style.fontSize = (10 + Math.random()*14) + 'px';
+      s.textContent = Math.random()<.3 ? '✨' : '✦';
+      s.style.left  = (2 + Math.random()*96) + '%';
+      s.style.top   = (10 + Math.random()*85) + '%';
+      s.style.fontSize = (10 + Math.random()*18) + 'px';
       s.style.animationDelay    = (Math.random()*7) + 's';
       s.style.animationDuration = (5 + Math.random()*5) + 's';
       hero.appendChild(s);
@@ -526,6 +551,7 @@ rsvpForm.addEventListener('submit', async (e) => {
     rsvpStatus.textContent = data.attending === 'yes'
       ? "Thank you! We can't wait to celebrate with you. ✦"
       : "Thank you for letting us know — you'll be missed. ✦";
+    if (data.attending === 'yes' && window.__celebrate) window.__celebrate();
     rsvpForm.reset();
   } catch (err){
     console.error(err);
