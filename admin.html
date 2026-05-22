@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Wedding Admin · Rashmitha & Uttej</title>
+<meta name="robots" content="noindex,nofollow" />
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Cinzel:wght@500;600&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --gold:#8E7A5F; --gold-light:#C9B68B; --gold-soft:#E8DCC4;
+    --cream:#F8F2E6; --ink:#3B2F1E; --muted:#7A6A52;
+    --green:#4A7C59; --red:#A85751;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--cream);color:var(--ink);font-family:'Montserrat',sans-serif;line-height:1.55;padding:30px 20px 60px}
+  .wrap{max-width:1100px;margin:0 auto}
+  h1{font-family:'Cormorant Garamond',serif;color:var(--gold);font-size:42px;font-weight:600;text-align:center}
+  .sub{text-align:center;font-family:'Cinzel',serif;letter-spacing:.3em;font-size:11px;color:var(--muted);margin-top:6px;margin-bottom:30px}
+
+  /* SUMMARY CARDS */
+  .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:14px;margin-bottom:28px}
+  .stat{
+    background:#fff;border:1px solid var(--gold-soft);border-radius:6px;
+    padding:18px 16px;text-align:center;box-shadow:0 4px 14px rgba(142,122,95,.08)
+  }
+  .stat .label{
+    font-family:'Cinzel',serif;letter-spacing:.2em;font-size:10px;color:var(--muted);
+    text-transform:uppercase
+  }
+  .stat .val{
+    font-family:'Cormorant Garamond',serif;font-size:42px;color:var(--gold);
+    font-weight:600;line-height:1;margin-top:8px
+  }
+  .stat.green .val{color:var(--green)}
+  .stat.red .val{color:var(--red)}
+  .stat.big{grid-column:span 2}
+  @media(max-width:600px){.stat.big{grid-column:span 1}}
+
+  /* TOOLBAR */
+  .toolbar{display:flex;flex-wrap:wrap;gap:10px;justify-content:space-between;align-items:center;margin:30px 0 12px}
+  .toolbar h2{font-family:'Cormorant Garamond',serif;color:var(--gold);font-size:26px;font-weight:600}
+  .actions{display:flex;gap:8px;flex-wrap:wrap}
+  .btn{
+    padding:9px 16px;background:var(--gold);color:#fff;border:none;cursor:pointer;
+    font-family:'Cinzel',serif;letter-spacing:.2em;font-size:11px;border-radius:2px
+  }
+  .btn:hover{background:var(--ink)}
+  .btn.ghost{background:transparent;color:var(--gold);border:1px solid var(--gold)}
+  .btn.ghost:hover{background:var(--gold);color:#fff}
+  input.search{
+    padding:9px 12px;border:1px solid var(--gold-soft);background:#fff;
+    font-family:'Montserrat',sans-serif;font-size:13px;border-radius:2px;min-width:220px;outline:none
+  }
+  input.search:focus{border-color:var(--gold)}
+
+  /* TABLE */
+  .table-wrap{background:#fff;border:1px solid var(--gold-soft);border-radius:6px;overflow:hidden;box-shadow:0 4px 14px rgba(142,122,95,.08)}
+  table{width:100%;border-collapse:collapse;font-size:14px}
+  thead th{
+    background:#F5EDDB;color:var(--muted);font-family:'Cinzel',serif;
+    letter-spacing:.18em;font-size:10.5px;text-transform:uppercase;
+    padding:12px 14px;text-align:left;border-bottom:1px solid var(--gold-soft);
+    white-space:nowrap;cursor:pointer;user-select:none
+  }
+  thead th:hover{color:var(--gold)}
+  thead th .arr{opacity:.5;margin-left:4px;font-size:9px}
+  tbody td{padding:12px 14px;border-bottom:1px solid #F0E7CF;vertical-align:top}
+  tbody tr:hover{background:#FBF7EE}
+  tbody tr:last-child td{border-bottom:none}
+  .pill{
+    display:inline-block;padding:3px 10px;border-radius:99px;font-size:11px;
+    font-family:'Cinzel',serif;letter-spacing:.12em
+  }
+  .pill.yes{background:#E2EFE3;color:var(--green)}
+  .pill.no{background:#F2DEDD;color:var(--red)}
+  .empty{padding:40px;text-align:center;color:var(--muted);font-style:italic}
+  .when{font-size:12px;color:var(--muted)}
+  .msg{max-width:520px;white-space:pre-wrap;word-wrap:break-word}
+
+  /* GATE */
+  .gate{
+    position:fixed;inset:0;background:linear-gradient(135deg,#F5E8C8,#E8DCC4);
+    display:flex;align-items:center;justify-content:center;z-index:9999;flex-direction:column;padding:20px
+  }
+  .gate .card{
+    background:#fff;border-radius:8px;padding:32px 28px;max-width:380px;width:100%;
+    box-shadow:0 12px 40px rgba(142,122,95,.25);text-align:center
+  }
+  .gate h1{font-size:32px;margin-bottom:6px}
+  .gate p{font-size:13px;color:var(--muted);margin:8px 0 18px}
+  .gate input{
+    width:100%;padding:12px;border:1px solid var(--gold-soft);border-radius:3px;
+    font-family:inherit;font-size:14px;outline:none;text-align:center;letter-spacing:.15em
+  }
+  .gate input:focus{border-color:var(--gold)}
+  .gate .err{color:var(--red);font-size:12px;min-height:16px;margin-top:8px}
+  .gate button{width:100%;margin-top:10px;padding:12px;background:var(--gold);color:#fff;border:none;cursor:pointer;font-family:'Cinzel',serif;letter-spacing:.25em;font-size:12px;border-radius:3px}
+</style>
+</head>
+<body>
+
+<!-- Simple passcode gate (test-mode DB is public, this is just to discourage casual viewing) -->
+<div class="gate" id="gate">
+  <div class="card">
+    <h1>Admin</h1>
+    <p>Rashmitha &amp; Uttej · RSVP Dashboard</p>
+    <input id="gateInput" type="password" placeholder="ENTER PASSCODE" autocomplete="off" />
+    <div class="err" id="gateErr">&nbsp;</div>
+    <button id="gateBtn" type="button">UNLOCK</button>
+  </div>
+</div>
+
+<div class="wrap" id="dashboard" style="display:none">
+  <h1>Rashmitha &amp; Uttej</h1>
+  <div class="sub">WEDDING ADMIN · JULY 2, 2026</div>
+
+  <div class="stats">
+    <div class="stat big green">
+      <div class="label">Total Guests Attending</div>
+      <div class="val" id="totalGuests">0</div>
+    </div>
+    <div class="stat green">
+      <div class="label">Accepted</div>
+      <div class="val" id="cntYes">0</div>
+    </div>
+    <div class="stat red">
+      <div class="label">Declined</div>
+      <div class="val" id="cntNo">0</div>
+    </div>
+    <div class="stat">
+      <div class="label">Total RSVPs</div>
+      <div class="val" id="cntAll">0</div>
+    </div>
+    <div class="stat">
+      <div class="label">Comments</div>
+      <div class="val" id="cntComments">0</div>
+    </div>
+  </div>
+
+  <!-- RSVPs -->
+  <div class="toolbar">
+    <h2>RSVPs</h2>
+    <div class="actions">
+      <input class="search" id="rsvpSearch" type="text" placeholder="Search by name…" />
+      <button class="btn ghost" id="exportRsvpsBtn" type="button">EXPORT CSV</button>
+    </div>
+  </div>
+  <div class="table-wrap">
+    <table id="rsvpTable">
+      <thead>
+        <tr>
+          <th data-key="name">Name <span class="arr"></span></th>
+          <th data-key="attending">Status <span class="arr"></span></th>
+          <th data-key="guestCount">Guests <span class="arr"></span></th>
+          <th data-key="timestamp">Submitted <span class="arr">▼</span></th>
+        </tr>
+      </thead>
+      <tbody id="rsvpBody">
+        <tr><td colspan="4" class="empty">Loading…</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Comments -->
+  <div class="toolbar">
+    <h2>Comments</h2>
+    <div class="actions">
+      <button class="btn ghost" id="exportCommentsBtn" type="button">EXPORT CSV</button>
+    </div>
+  </div>
+  <div class="table-wrap">
+    <table id="commentTable">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Message</th>
+          <th>Posted</th>
+        </tr>
+      </thead>
+      <tbody id="commentBody">
+        <tr><td colspan="3" class="empty">Loading…</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Firebase Compat SDKs -->
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
+
+<script>
+/* =====================================================================
+   CONFIG  —  same as index.html
+   ===================================================================== */
+const firebaseConfig = {
+  apiKey:            "AIzaSyDheFirjq2S4XMrj0AGLdEX3Byi-1qNFQQ",
+  authDomain:        "wedding-invite-50b3f.firebaseapp.com",
+  databaseURL:       "https://wedding-invite-50b3f-default-rtdb.firebaseio.com",
+  projectId:         "wedding-invite-50b3f",
+  storageBucket:     "wedding-invite-50b3f.firebasestorage.app",
+  messagingSenderId: "754825516242",
+  appId:             "1:754825516242:web:da2a65eaf44abf5452490b",
+  measurementId:     "G-NS8R4GF0YL"
+};
+const ADMIN_PASSCODE = "shaadi2026";   // ← change this if you like
+
+firebase.initializeApp(firebaseConfig);
+const db = firebase.database();
+
+/* =====================================================================
+   PASSCODE GATE
+   ===================================================================== */
+const gate     = document.getElementById('gate');
+const gateIn   = document.getElementById('gateInput');
+const gateBtn  = document.getElementById('gateBtn');
+const gateErr  = document.getElementById('gateErr');
+const dash     = document.getElementById('dashboard');
+
+function tryUnlock(){
+  if (gateIn.value.trim() === ADMIN_PASSCODE){
+    sessionStorage.setItem('ru_admin_ok','1');
+    gate.style.display = 'none';
+    dash.style.display = 'block';
+    start();
+  } else {
+    gateErr.textContent = "Incorrect passcode";
+    gateIn.value = '';
+    gateIn.focus();
+  }
+}
+gateBtn.addEventListener('click', tryUnlock);
+gateIn.addEventListener('keydown', e => { if (e.key === 'Enter') tryUnlock(); });
+if (sessionStorage.getItem('ru_admin_ok') === '1'){
+  gate.style.display = 'none';
+  dash.style.display = 'block';
+  start();
+} else {
+  gateIn.focus();
+}
+
+/* =====================================================================
+   DASHBOARD
+   ===================================================================== */
+let rsvps = [];
+let comments = [];
+let rsvpSort = { key: 'timestamp', dir: -1 };
+let rsvpSearch = '';
+
+function escapeHtml(s){
+  return String(s||'').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+function fmtDate(ts){
+  if (!ts) return '';
+  try {
+    return new Date(ts).toLocaleString(undefined, {
+      year:'numeric', month:'short', day:'numeric', hour:'numeric', minute:'2-digit'
+    });
+  } catch(e){ return ''; }
+}
+function guestNum(v){
+  if (v === '4+') return 4;
+  const n = parseInt(v, 10);
+  return isNaN(n) ? 1 : n;
+}
+
+function renderStats(){
+  const yes = rsvps.filter(r => r.attending === 'yes');
+  const no  = rsvps.filter(r => r.attending === 'no');
+  const total = yes.reduce((sum, r) => sum + guestNum(r.guestCount), 0);
+  document.getElementById('totalGuests').textContent = total;
+  document.getElementById('cntYes').textContent = yes.length;
+  document.getElementById('cntNo').textContent  = no.length;
+  document.getElementById('cntAll').textContent = rsvps.length;
+  document.getElementById('cntComments').textContent = comments.length;
+}
+
+function renderRsvps(){
+  const tbody = document.getElementById('rsvpBody');
+  let rows = rsvps.slice();
+  if (rsvpSearch){
+    const q = rsvpSearch.toLowerCase();
+    rows = rows.filter(r => (r.name||'').toLowerCase().includes(q));
+  }
+  rows.sort((a,b) => {
+    let av = a[rsvpSort.key], bv = b[rsvpSort.key];
+    if (rsvpSort.key === 'guestCount'){ av = guestNum(av); bv = guestNum(bv); }
+    if (rsvpSort.key === 'timestamp'){ av = av||0; bv = bv||0; }
+    av = (av||'').toString().toLowerCase ? (av||'').toString().toLowerCase() : av;
+    bv = (bv||'').toString().toLowerCase ? (bv||'').toString().toLowerCase() : bv;
+    if (av < bv) return -1 * rsvpSort.dir;
+    if (av > bv) return  1 * rsvpSort.dir;
+    return 0;
+  });
+  if (!rows.length){
+    tbody.innerHTML = '<tr><td colspan="4" class="empty">No RSVPs yet.</td></tr>';
+    return;
+  }
+  tbody.innerHTML = rows.map(r => `
+    <tr>
+      <td>${escapeHtml(r.name)}</td>
+      <td><span class="pill ${r.attending==='yes'?'yes':'no'}">${r.attending==='yes'?'Attending':'Declined'}</span></td>
+      <td>${escapeHtml(r.guestCount||'1')}</td>
+      <td class="when">${fmtDate(r.timestamp)}</td>
+    </tr>`).join('');
+}
+
+function renderComments(){
+  const tbody = document.getElementById('commentBody');
+  const rows = comments.slice().sort((a,b)=>(b.timestamp||0)-(a.timestamp||0));
+  if (!rows.length){
+    tbody.innerHTML = '<tr><td colspan="3" class="empty">No comments yet.</td></tr>';
+    return;
+  }
+  tbody.innerHTML = rows.map(c => `
+    <tr>
+      <td>${escapeHtml(c.name)}</td>
+      <td class="msg">${escapeHtml(c.message)}</td>
+      <td class="when">${fmtDate(c.timestamp)}</td>
+    </tr>`).join('');
+}
+
+function toCSV(rows, headers){
+  const esc = v => `"${String(v==null?'':v).replace(/"/g,'""')}"`;
+  const head = headers.map(h => esc(h.label)).join(',');
+  const body = rows.map(r => headers.map(h => esc(typeof h.get==='function' ? h.get(r) : r[h.key])).join(',')).join('\n');
+  return head + '\n' + body;
+}
+function download(filename, text){
+  const blob = new Blob([text], {type:'text/csv;charset=utf-8'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = filename;
+  document.body.appendChild(a); a.click();
+  setTimeout(()=>{ URL.revokeObjectURL(a.href); a.remove(); }, 1000);
+}
+
+document.getElementById('exportRsvpsBtn').addEventListener('click', () => {
+  const csv = toCSV(rsvps, [
+    {label:'Name', key:'name'},
+    {label:'Attending', key:'attending'},
+    {label:'Guest Count', key:'guestCount'},
+    {label:'Guest Count (numeric)', get:r=>guestNum(r.guestCount)},
+    {label:'Submitted', get:r=>fmtDate(r.timestamp)},
+  ]);
+  download('rsvps.csv', csv);
+});
+document.getElementById('exportCommentsBtn').addEventListener('click', () => {
+  const csv = toCSV(comments, [
+    {label:'Name', key:'name'},
+    {label:'Message', key:'message'},
+    {label:'Posted', get:r=>fmtDate(r.timestamp)},
+  ]);
+  download('comments.csv', csv);
+});
+
+// Column sort
+document.querySelectorAll('#rsvpTable thead th').forEach(th => {
+  th.addEventListener('click', () => {
+    const key = th.dataset.key;
+    if (!key) return;
+    if (rsvpSort.key === key){ rsvpSort.dir *= -1; } else { rsvpSort.key = key; rsvpSort.dir = 1; }
+    document.querySelectorAll('#rsvpTable thead th .arr').forEach(a => a.textContent='');
+    th.querySelector('.arr').textContent = rsvpSort.dir === 1 ? '▲' : '▼';
+    renderRsvps();
+  });
+});
+document.getElementById('rsvpSearch').addEventListener('input', e => {
+  rsvpSearch = e.target.value;
+  renderRsvps();
+});
+
+function start(){
+  db.ref('rsvps').on('value', snap => {
+    rsvps = [];
+    snap.forEach(c => rsvps.push(c.val()));
+    renderStats();
+    renderRsvps();
+  });
+  db.ref('comments').on('value', snap => {
+    comments = [];
+    snap.forEach(c => comments.push(c.val()));
+    renderStats();
+    renderComments();
+  });
+}
+</script>
+</body>
+</html>
