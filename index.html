@@ -243,10 +243,12 @@
   .reveal{opacity:0;transform:translateY(24px);transition:opacity .9s ease,transform .9s ease}
   .reveal.in{opacity:1;transform:none}
 
-  /* ===== SPARKLES (fixed full-page layer) ===== */
+  /* ===== SPARKLES (full-page, scroll with content) ===== */
+  body{position:relative}
   .sparkle-layer{
-    position:fixed;inset:0;pointer-events:none;
-    z-index:5;overflow:hidden;
+    position:absolute;top:0;left:0;
+    width:100%;height:100%;
+    pointer-events:none;z-index:5;overflow:hidden;
   }
   .sparkle{
     position:absolute;color:var(--gold-light);font-size:14px;
@@ -477,31 +479,34 @@
   }, { threshold: 0.12 });
   document.querySelectorAll('.reveal').forEach(el => io.observe(el));
 
-  // Sparkles drifting across the full page, continuously
+  // Sparkles drifting across the full page, continuously (scroll with content)
   let sparkleLayer = document.querySelector('.sparkle-layer');
   if (!sparkleLayer){
     sparkleLayer = document.createElement('div');
     sparkleLayer.className = 'sparkle-layer';
     document.body.appendChild(sparkleLayer);
   }
+  function getDocHeight(){
+    return Math.max(document.body.scrollHeight, document.documentElement.scrollHeight);
+  }
   function spawnSparkle(){
     const s = document.createElement('span');
     s.className = 'sparkle';
     s.textContent = Math.random()<.35 ? '✨' : '✦';
-    s.style.left = (Math.random()*100) + 'vw';
-    s.style.top  = (Math.random()*100) + 'vh';
+    s.style.left = (Math.random()*100) + '%';
+    // Random position across the full document height (not just viewport)
+    s.style.top  = (Math.random() * getDocHeight()) + 'px';
     s.style.fontSize = (10 + Math.random()*16) + 'px';
     const dur = 5 + Math.random()*5;
     s.style.animationDuration = dur + 's';
-    s.style.animationDelay = '0s';
     sparkleLayer.appendChild(s);
     setTimeout(()=>s.remove(), dur*1000 + 100);
   }
   // Seed initial sparkles, then keep spawning
-  for (let i=0;i<24;i++){
+  for (let i=0;i<40;i++){
     setTimeout(spawnSparkle, Math.random()*5000);
   }
-  setInterval(spawnSparkle, 450);
+  setInterval(spawnSparkle, 350);
 })();
 
 /* =====================================================================
