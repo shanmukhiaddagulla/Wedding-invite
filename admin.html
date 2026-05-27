@@ -115,6 +115,8 @@
   <h1>Rashmitha &amp; Uttej</h1>
   <div class="sub">WEDDING ADMIN · JULY 2, 2026</div>
 
+  <div id="connStatus" style="text-align:center;font-size:12px;letter-spacing:.15em;font-family:'Cinzel',serif;margin-bottom:18px;padding:8px;border-radius:3px;background:#FBF7EE;color:var(--muted)">CONNECTING TO DATABASE…</div>
+
   <div class="stats">
     <div class="stat big green">
       <div class="label">Total Guests Attending</div>
@@ -371,18 +373,38 @@ document.getElementById('rsvpSearch').addEventListener('input', e => {
 });
 
 function start(){
+  const conn = document.getElementById('connStatus');
+  let rsvpsLoaded = false, commentsLoaded = false;
+  function updateConn(){
+    if (rsvpsLoaded && commentsLoaded){
+      conn.textContent = `✓ LIVE · ${rsvps.length} RSVPs · ${comments.length} COMMENTS`;
+      conn.style.background = '#E2EFE3';
+      conn.style.color = 'var(--green)';
+    }
+  }
+  function onError(label, err){
+    console.error('[admin]', label, err);
+    conn.textContent = `⚠ ${label.toUpperCase()} ERROR: ${err && err.code || err && err.message || err}`;
+    conn.style.background = '#F2DEDD';
+    conn.style.color = 'var(--red)';
+  }
   db.ref('rsvps').on('value', snap => {
     rsvps = [];
     snap.forEach(c => rsvps.push(c.val()));
+    rsvpsLoaded = true;
     renderStats();
     renderRsvps();
-  });
+    updateConn();
+  }, err => onError('RSVPs', err));
   db.ref('comments').on('value', snap => {
     comments = [];
     snap.forEach(c => comments.push(c.val()));
+    commentsLoaded = true;
     renderStats();
     renderComments();
-  });
+    updateConn();
+  }, err => onError('Comments', err));
+  console.log('[admin] subscribed to rsvps and comments at', firebaseConfig.databaseURL);
 }
 </script>
 </body>
