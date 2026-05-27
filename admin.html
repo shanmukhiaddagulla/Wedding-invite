@@ -115,7 +115,10 @@
   <h1>Rashmitha &amp; Uttej</h1>
   <div class="sub">WEDDING ADMIN · JULY 2, 2026</div>
 
-  <div id="connStatus" style="text-align:center;font-size:12px;letter-spacing:.15em;font-family:'Cinzel',serif;margin-bottom:18px;padding:8px;border-radius:3px;background:#FBF7EE;color:var(--muted)">CONNECTING TO DATABASE…</div>
+  <div style="display:flex;gap:10px;align-items:center;margin-bottom:18px">
+    <div id="connStatus" style="flex:1;text-align:center;font-size:12px;letter-spacing:.15em;font-family:'Cinzel',serif;padding:8px;border-radius:3px;background:#FBF7EE;color:var(--muted)">CONNECTING TO DATABASE…</div>
+    <button id="refreshBtn" type="button" style="padding:8px 14px;font-family:'Cinzel',serif;font-size:11px;letter-spacing:.2em;background:#fff;border:1px solid var(--gold-soft);color:var(--gold);border-radius:3px;cursor:pointer;white-space:nowrap">⟳ REFRESH NOW</button>
+  </div>
 
   <div class="stats">
     <div class="stat big green">
@@ -393,30 +396,59 @@ function start(){
     conn.style.background = '#F2DEDD';
     conn.style.color = 'var(--red)';
   }
-  db.ref('rsvps').on('value', snap => {
+  function applyRsvpsSnap(snap, source){
     rsvps = [];
     snap.forEach(c => rsvps.push(c.val()));
     rsvpsLoaded = true;
     rsvpEvents++;
-    console.log(`[admin] rsvps snapshot #${rsvpEvents} — ${rsvps.length} entries`);
+    console.log(`[admin] rsvps ${source} #${rsvpEvents} — ${rsvps.length} entries`);
     renderStats();
     renderRsvps();
     updateConn();
-  }, err => onError('RSVPs', err));
-  db.ref('comments').on('value', snap => {
+  }
+  function applyCommentsSnap(snap, source){
     comments = [];
     snap.forEach(c => comments.push(c.val()));
     commentsLoaded = true;
     commentEvents++;
-    console.log(`[admin] comments snapshot #${commentEvents} — ${comments.length} entries`);
+    console.log(`[admin] comments ${source} #${commentEvents} — ${comments.length} entries`);
     renderStats();
     renderComments();
     updateConn();
-  }, err => onError('Comments', err));
+  }
 
-  // Connection state indicator
+  // Authoritative one-shot fetch (bypasses any stale .on cache)
+  function pullFresh(reason){
+    console.log('[admin] pullFresh:', reason);
+    db.ref('rsvps').once('value')
+      .then(s => applyRsvpsSnap(s, 'once:'+reason))
+      .catch(err => onError('RSVPs', err));
+    db.ref('comments').once('value')
+      .then(s => applyCommentsSnap(s, 'once:'+reason))
+      .catch(err => onError('Comments', err));
+  }
+
+  // Initial authoritative pull, then live listeners for instant updates
+  pullFresh('initial');
+  db.ref('rsvps').on('value',
+    s => applyRsvpsSnap(s, 'live'),
+    err => onError('RSVPs', err));
+  db.ref('comments').on('value',
+    s => applyCommentsSnap(s, 'live'),
+    err => onError('Comments', err));
+
+  // Safety net: re-pull every 15s in case live listener stalls
+  setInterval(() => pullFresh('poll-15s'), 15000);
+
+  // Manual refresh button
+  const refreshBtn = document.getElementById('refreshBtn');
+  if (refreshBtn) refreshBtn.addEventListener('click', () => pullFresh('manual'));
+
+  // Re-pull whenever WebSocket reconnects (catches the stale-snapshot bug)
   firebase.database().ref('.info/connected').on('value', s => {
-    console.log('[admin] .info/connected =', s.val());
+    const v = s.val();
+    console.log('[admin] .info/connected =', v);
+    if (v === true) pullFresh('reconnect');
   });
 
   console.log('[admin] subscribed to rsvps and comments at', firebaseConfig.databaseURL);
