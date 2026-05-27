@@ -375,9 +375,14 @@ document.getElementById('rsvpSearch').addEventListener('input', e => {
 function start(){
   const conn = document.getElementById('connStatus');
   let rsvpsLoaded = false, commentsLoaded = false;
+  let rsvpEvents = 0, commentEvents = 0;
+  function fmtNow(){
+    const d = new Date();
+    return d.toLocaleTimeString(undefined,{hour:'2-digit',minute:'2-digit',second:'2-digit'});
+  }
   function updateConn(){
     if (rsvpsLoaded && commentsLoaded){
-      conn.textContent = `✓ LIVE · ${rsvps.length} RSVPs · ${comments.length} COMMENTS`;
+      conn.textContent = `✓ LIVE · ${rsvps.length} RSVPs · ${comments.length} COMMENTS · LAST UPDATE ${fmtNow()} (events: ${rsvpEvents}/${commentEvents})`;
       conn.style.background = '#E2EFE3';
       conn.style.color = 'var(--green)';
     }
@@ -392,6 +397,8 @@ function start(){
     rsvps = [];
     snap.forEach(c => rsvps.push(c.val()));
     rsvpsLoaded = true;
+    rsvpEvents++;
+    console.log(`[admin] rsvps snapshot #${rsvpEvents} — ${rsvps.length} entries`);
     renderStats();
     renderRsvps();
     updateConn();
@@ -400,10 +407,18 @@ function start(){
     comments = [];
     snap.forEach(c => comments.push(c.val()));
     commentsLoaded = true;
+    commentEvents++;
+    console.log(`[admin] comments snapshot #${commentEvents} — ${comments.length} entries`);
     renderStats();
     renderComments();
     updateConn();
   }, err => onError('Comments', err));
+
+  // Connection state indicator
+  firebase.database().ref('.info/connected').on('value', s => {
+    console.log('[admin] .info/connected =', s.val());
+  });
+
   console.log('[admin] subscribed to rsvps and comments at', firebaseConfig.databaseURL);
 }
 </script>
